@@ -22,13 +22,13 @@ const updateByPk = async (model, data, id) => {
 
 const deleteByPk = async (model, id) => {
   const data = await model.findByPk(id);
-  if(data === null || data.deletedAt !== null) {
+  if(data === null || data.deleted_at !== null) {
     return {
       message: "Record Not Found.",
       data: {},
     };
   }
-  const result = await model.update({ deletedAt: new Date()},{ where: { id: id } });
+  const result = await model.update({ deleted_at: new Date()},{ where: { id: id } });
   if (result[0] === 1) {
     return {
       message: "Record Deleted Successfully.",
@@ -48,11 +48,11 @@ const updateMany = (model, filter, data) => model.updateMany(filter, data);
 const deleteMany = (model, filter) => model.deleteMany(filter);
 
 // find single document by query
-const findOne = (model, where) => model.findOne({ where: { ...where, deletedAt: null } });
+const findOne = (model, where) => model.findOne({ where: { ...where, deleted_at: null } });
 
 // find single document by query
 const findByPk = async (model, id) => {
-  const result = await model.findOne({where : { id: id, deletedAt: null}});
+  const result = await model.findOne({where : { id: id, deleted_at: null}});
   if (result === null) {
     return {
       message: "Record Not Found",
@@ -67,7 +67,7 @@ const findByPk = async (model, id) => {
 
 // find multiple documents
 const findAll = (model, where = {}, options = {}) =>
-  model.findAll({ ...where, deletedAt: null }, options);
+  model.findAll({ ...where, deleted_at: null }, options);
 
 // find multiple documents
 const findAndCountAll = async (model, query) => {
@@ -78,7 +78,7 @@ const findAndCountAll = async (model, query) => {
   select = select ? JSON.parse(select) : [];
   where = {
     ...where,
-    deletedAt: null,
+    deleted_at: null,
   };
   const sequelizeOptions = {
     where,
@@ -102,7 +102,7 @@ const findAndCountAll = async (model, query) => {
 };
 
 const findOrCreate = async (model, where, defaults) => {
-  const [record, created] = await model.findOrCreate({ where: { ...where, deletedAt: null }, defaults: defaults });
+  const [record, created] = await model.findOrCreate({ where: { ...where, deleted_at: null }, defaults: defaults });
   return [record, !created];
 }
 

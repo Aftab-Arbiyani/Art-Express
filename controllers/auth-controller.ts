@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import dayjs from "dayjs";
 
 import response from "../utils/response";
 import dbService from "../utils/dbService";
 
 import userModel from "../models/user-model";
 import userTokenModel from "../models/user-token-model";
+import { EmailService } from "../middleware/send-mail";
+import otpModel from "../models/otp-model";
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET, {
@@ -27,10 +28,10 @@ const isTokenExpired = async (token) => {
   }
 };
 
-const createUserToken = async (payload) => {
+const createUserToken = async (payload, fk_table) => {
   const [token, isExist] = await dbService.findOrCreate(
     userTokenModel,
-    { fk_user: payload.fk_user },
+    { [fk_table]: payload[fk_table] },
     payload
   );
   const isExpired = await isTokenExpired(token.token);
@@ -42,7 +43,7 @@ const createUserToken = async (payload) => {
   return token.token;
 };
 
-const signup = async (req, res) => {
+const signupUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const device = req.headers["user-agent"];
@@ -55,7 +56,7 @@ const signup = async (req, res) => {
     const already = await dbService.findOne(userModel, where);
     if (already) {
       return response.badRequest(
-        { message: "email is already exist", data: { email: email } },
+        { message: "Email is already exist", data: { email: email } },
         res
       );
     }
@@ -71,6 +72,23 @@ const signup = async (req, res) => {
 
     const result = await user.save();
 
+    //generate random code
+    const code = Math.floor(100000 + Math.random() * 100000);
+
+    await dbService.findOrCreate(
+      otpModel,
+      { fk_user: user.id, is_verified: false, otp_type: 'sign_up' },
+      { otp: code }
+    );
+
+    const emailService = new EmailService();
+
+    emailService.sendMail({
+      to: email,
+      subject: 'Email Verification | Art Mart',
+      text: `Your Otp is: ${code}`
+    });
+
     // generate token
     const token = await generateToken(user.id);
 
@@ -80,7 +98,7 @@ const signup = async (req, res) => {
       token,
       device,
       ip,
-    });
+    }, 'fk_user');
 
     return response.successResponse(
       { message: "Signup Successful", data: { id: result.id, token: token } },
@@ -124,7 +142,7 @@ const login = async (req, res) => {
       token,
       device,
       ip,
-    });
+    }, 'fk_user');
     return response.successResponse(
       { message: "Login Successful", data: { id: user.id, token: user.token } },
       res
@@ -135,7 +153,7 @@ const login = async (req, res) => {
 };
 
 const authController = {
-  signup,
+  signupUser,
   login,
 };
 

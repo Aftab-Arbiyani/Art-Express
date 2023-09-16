@@ -12,11 +12,12 @@ const verifyToken = async (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const validate = await jwt.verify(token, process.env.SECRET);
     if (validate) {
-      const findToken = await dbService.findOne(user_token, { fk_user: validate.id, token });
+      const findToken = await dbService.findOne(user_token, { [validate['column']]: validate['id'], token });
 
       if (!findToken) {
         return response.unAuthorizedRequest(res);
       }
+      Object.assign(req, { user: { column: validate['column'], id: validate['id'], table: validate['table'] } });
       next();
     }
   } catch (error) {

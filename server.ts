@@ -11,6 +11,14 @@ const port = process.env.PORT || 3000;
 
 const server = app.listen(port);
 
+const models = sequelize.models;
+
+Object.keys(models).forEach(name => {
+  if ('associate' in models[name]) {
+    (models[name] as any).associate(models);
+  }
+});
+
 sequelize
   .sync()
   .then(() => {

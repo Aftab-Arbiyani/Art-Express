@@ -6,8 +6,8 @@ import sequelize from "../sequelize";
 import otpModel from "./otp-model";
 
 const sequelizeClient: Sequelize = sequelize;
-const user = sequelizeClient.define(
-  "user",
+const artists = sequelizeClient.define(
+  "artists",
   {
     id: {
       type: DataTypes.UUID,
@@ -46,7 +46,7 @@ const user = sequelizeClient.define(
     },
     phone_number: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
@@ -56,6 +56,10 @@ const user = sequelizeClient.define(
     },
     profile_picture: {
       type: DataTypes.STRING,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     is_verified: {
       type: DataTypes.BOOLEAN,
@@ -67,7 +71,7 @@ const user = sequelizeClient.define(
   },
   {
     timestamps: true,
-    tableName: "user",
+    tableName: "artists",
     createdAt: "created_at",
     updatedAt: "updated_at",
     hooks: {
@@ -79,11 +83,11 @@ const user = sequelizeClient.define(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-(user as any).associate = function (models: any): void {
+(artists as any).associate = function (models: any): void {
   // Define associations here
   // See https://sequelize.org/master/manual/assocs.html
-  user.hasMany(models.userToken, { sourceKey: 'id', foreignKey: 'fk_user' });
-  user.hasMany(otpModel, { sourceKey: 'id', foreignKey: 'fk_user' });
+  artists.hasMany(models.userToken, { sourceKey: 'id', foreignKey: 'fk_artist' });
+  artists.hasMany(otpModel, { sourceKey: 'id', foreignKey: 'fk_artist' });
 };
 
-export default user;
+export default artists;

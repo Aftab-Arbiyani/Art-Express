@@ -8,6 +8,12 @@ const sequelizeClient: Sequelize = sequelize;
 const userToken = sequelizeClient.define(
   "userToken",
   {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: UUIDV4,
+      allowNull: false,
+    },
     fk_user: {
       type: DataTypes.UUID,
     },
@@ -20,14 +26,15 @@ const userToken = sequelizeClient.define(
     device: {
       type: DataTypes.STRING,
     },
-    deletedAt: {
-      type: DataTypes.DATE,
-      defaultValue: null,
-    },
+    deleted_at: {
+      type: DataTypes.DATE
+    }
   },
   {
     timestamps: true,
-    tableName: "USER_TOKEN",
+    tableName: "user_token",
+    createdAt: "created_at",
+    updatedAt: "updated_at",
     hooks: {
       beforeCount(options: any): HookReturn {
         options.raw = true;
@@ -40,6 +47,8 @@ const userToken = sequelizeClient.define(
 (userToken as any).associate = function (models: any): void {
   // Define associations here
   // See https://sequelize.org/master/manual/assocs.html
+  userToken.belongsTo(models.user, { foreignKey: 'fk_user', targetKey: 'id' });
+  userToken.belongsTo(models.artists, { foreignKey: 'fk_artist', targetKey: 'id' });
 };
 
 export default userToken;

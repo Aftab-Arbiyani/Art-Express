@@ -2,9 +2,20 @@
 const create = (model, data) => model.create(data);
 
 // update single document that will return updated document
-const updateOne = (model, filter, data, options = { new: true }) =>
-  model.findOneAndUpdate(filter, data, options);
-
+const updateOne = async (model, filter, data, options = { new: true }) => {
+  const result = await model.update(data, { where: filter }, options);
+  if (result[0] === 1) {
+    const data = await findOne(model, filter);
+    return {
+      message: 'Record Updated Successfully.',
+      data: data ? data.dataValues : {},
+    };
+  }
+  return {
+    message: 'Record Not Found.',
+    data: {},
+  };
+};
 const updateByPk = async (model, data, id) => {
   const result = await model.update(data, { where: { id: id } });
   if (result[0] === 1) {
@@ -74,7 +85,7 @@ const findAndCountAll = async (model, query) => {
   let { limit, skip, order, select, ...where } = query;
   limit = limit ? parseInt(limit) : 10;
   skip = skip ? parseInt(skip) : 0;
-  order = order ? [JSON.parse(order)] : [["createdAt", "ASC"]];
+  order = order ? [JSON.parse(order)] : [["created_at", "ASC"]];
   select = select ? JSON.parse(select) : [];
   where = {
     ...where,

@@ -78,7 +78,7 @@ const signupUser = async (req, res) => {
     await dbService.findOrCreate(
       otpModel,
       { fk_user: user.id, is_verified: false, otp_type: 'sign_up' },
-      { otp: code }
+      { fk_user: user.id, otp: code }
     );
 
     const emailService = new EmailService();
@@ -109,7 +109,7 @@ const signupUser = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const device = req.headers["user-agent"];
@@ -120,6 +120,13 @@ const login = async (req, res) => {
     if (!user) {
       return response.badRequest(
         { message: "Email or password is wrong!", data: {} },
+        res
+      );
+    }
+
+    if (!user.is_verified) {
+      return response.badRequest(
+        { message: "Email verification pending!", data: {} },
         res
       );
     }
@@ -154,7 +161,7 @@ const login = async (req, res) => {
 
 const authController = {
   signupUser,
-  login,
+  loginUser,
 };
 
 export default authController;

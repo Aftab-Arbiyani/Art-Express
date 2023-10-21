@@ -14,5 +14,6 @@ const modifyPayload = (table) => {
 const commonRouter = express.Router();
 
 commonRouter.post('/user/verify-otp', validationMiddleware(verifyOtpSchema), modifyPayload('user'), commonController.verifyOtp);
+commonRouter.post('/artist/verify-otp', validationMiddleware(verifyOtpSchema), modifyPayload('artist'), commonController.verifyOtp);
 
 export default commonRouter;

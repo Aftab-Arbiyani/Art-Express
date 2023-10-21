@@ -1,12 +1,17 @@
 import dbService from "../utils/dbService";
 import response from "../utils/response";
 
-import artistsModel from "../models/artists-model";
-import fs from 'fs';
+import userAddressModel from "../models/user-address-model";
 
 const create = async (req, res, next) => {
   try {
-    const data = await dbService.create(artistsModel, req.body);
+    const count = await userAddressModel.count({ where: { fk_user: req.user.id, deleted_at: null } });
+
+    if (count === 3) {
+      return response.successResponse({ data: {}, message: "You can add upto three addresses only" }, res);
+    }
+    Object.assign(req.body, { fk_user: req.user.id });
+    const data = await dbService.create(userAddressModel, req.body);
     response.successCreate(data, res);
     next();
   } catch (error) {
@@ -16,7 +21,7 @@ const create = async (req, res, next) => {
 
 const findAndCountAll = async (req, res, next) => {
   try {
-    const data = await dbService.findAndCountAll(artistsModel, req.query);
+    const data = await dbService.findAndCountAll(userAddressModel, req.query);
     response.successResponseWithPagination(data, res);
     next();
   } catch (error) {
@@ -26,7 +31,7 @@ const findAndCountAll = async (req, res, next) => {
 
 const findByPk = async (req, res, next) => {
   try {
-    const data = await dbService.findByPk(artistsModel, req.params.id);
+    const data = await dbService.findByPk(userAddressModel, req.params.id);
     response.successResponse(data, res);
     next();
   } catch (error) {
@@ -34,22 +39,9 @@ const findByPk = async (req, res, next) => {
   }
 };
 
-const editProfile = async (req, res, next) => {
+const updateByPk = async (req, res, next) => {
   try {
-    if (req.file) {
-      Object.assign(req.body, { profile_picture: req.file.path });
-
-      const attributes = {
-        include: ['profile_picture']
-      };
-      // Remove Old Image
-      const old: any = await dbService.findByPk(artistsModel, req.user.id, attributes);
-      // Check if file exists
-      if (old.data.profile_picture && fs.existsSync(old.data.profile_picture)) {
-        fs.rmSync(old.data.profile_picture);
-      }
-    }
-    const data = await dbService.updateByPk(artistsModel, req.body, req.user.id);
+    const data = await dbService.updateByPk(userAddressModel, req.body, req.params.id);
     response.successResponse(data, res);
     next();
   } catch (error) {
@@ -59,7 +51,7 @@ const editProfile = async (req, res, next) => {
 
 const deleteByPk = async (req, res, next) => {
   try {
-    const data = await dbService.deleteByPk(artistsModel, req.params.id);
+    const data = await dbService.deleteByPk(userAddressModel, req.params.id);
     response.successResponse(data, res);
     next();
   } catch (error) {
@@ -67,11 +59,11 @@ const deleteByPk = async (req, res, next) => {
   }
 };
 
-const artistsController = {
+const userAddressController = {
   create,
   findAndCountAll,
   findByPk,
-  editProfile,
+  updateByPk,
   deleteByPk,
 };
-export default artistsController;
+export default userAddressController;

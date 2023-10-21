@@ -62,16 +62,21 @@ const deleteMany = (model, filter) => model.deleteMany(filter);
 const findOne = (model, where) => model.findOne({ where: { ...where, deleted_at: null } });
 
 // find single document by query
-const findByPk = async (model, id) => {
-  const result = await model.findOne({where : { id: id, deleted_at: null}});
+const findByPk = async (model, id, attributes: { include?: string[], exclude?: string[] } = { include: [], exclude: [] }) => {
+  let defaultAttribute: any = { exclude: ['deleted_at', 'created_at_ip', 'updated_at_ip', 'deleted_at_ip', 'updated_at', 'password', 'deleted_reason'] };
+  if (attributes?.include?.length) {
+    defaultAttribute = attributes.include;
+  }
+  const sequelizeOptions = { where: { id: id, deleted_at: null }, attributes: defaultAttribute };
+  const result = await model.findOne(sequelizeOptions);
   if (result === null) {
     return {
-      message: "Record Not Found",
+      message: 'Record Not Found',
       data: {},
     };
   }
   return {
-    message: "Record Found",
+    message: 'Record Found',
     data: result.dataValues,
   };
 };

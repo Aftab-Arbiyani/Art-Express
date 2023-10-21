@@ -8,5 +8,7 @@ const authRouter = express.Router();
 
 authRouter.post('/signup-user', validationMiddleware(signupSchema), authController.signupUser);
 authRouter.post('/login-user', validationMiddleware(loginSchema), authController.loginUser);
+authRouter.post('/signup-artist', validationMiddleware(signupSchema), authController.signupArtist);
+authRouter.post('/login-artist', validationMiddleware(loginSchema), authController.loginArtist);
 
 export default authRouter;

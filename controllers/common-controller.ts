@@ -10,7 +10,7 @@ const getModel = (table: string) => {
     case 'user':
       return ['fk_user', userModel];
     case 'artist':
-      return ['artist', 'fk_artist', artistsModel];
+      return ['fk_artist', artistsModel];
   }
 };
 

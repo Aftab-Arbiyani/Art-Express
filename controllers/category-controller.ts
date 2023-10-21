@@ -12,8 +12,7 @@ const create = async (req, res, next) => {
     response.successCreate(data, res);
     next();
   } catch (error) {
-    response.failureResponse(error, res);
-    next();
+    return response.failureResponse(error, res);
   }
 };
 
@@ -23,8 +22,7 @@ const findAndCountAll = async (req, res, next) => {
     response.successResponseWithPagination(data, res);
     next();
   } catch (error) {
-    response.failureResponse(error, res);
-    next();
+    return response.failureResponse(error, res);
   }
 };
 
@@ -34,8 +32,7 @@ const findByPk = async (req, res, next) => {
     response.successResponse(data, res);
     next();
   } catch (error) {
-    response.failureResponse(error, res);
-    next();
+    return response.failureResponse(error, res);
   }
 };
 
@@ -45,8 +42,7 @@ const updateByPk = async (req, res, next) => {
     response.successResponse(data, res);
     next();
   } catch (error) {
-    response.failureResponse(error, res);
-    next();
+    return response.failureResponse(error, res);
   }
 };
 
@@ -56,8 +52,7 @@ const deleteByPk = async (req, res, next) => {
     response.successResponse(data, res);
     next();
   } catch (error) {
-    response.failureResponse(error, res);
-    next();
+    return response.failureResponse(error, res);
   }
 };
 

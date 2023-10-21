@@ -34,3 +34,8 @@ export const categoryImage = multer({
   storage: multerDynamicStorage('category'),
   fileFilter: commonImageFilter
 });
+
+export const profileImageUpload = multer({
+  storage: multerDynamicStorage('profile'),
+  fileFilter: commonImageFilter
+});

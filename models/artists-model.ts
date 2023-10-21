@@ -19,14 +19,14 @@ const artists = sequelizeClient.define(
       type: DataTypes.STRING,
       set: function (val: string) {
         val = val.trim();
-        this.setDataValue("firstName", val);
+        this.setDataValue("first_name", val);
       },
     },
     last_name: {
       type: DataTypes.STRING,
       set: function (val: string) {
         val = val.trim();
-        this.setDataValue("lastName", val);
+        this.setDataValue("last_name", val);
       },
     },
     email: {
@@ -46,7 +46,7 @@ const artists = sequelizeClient.define(
     },
     phone_number: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -59,7 +59,7 @@ const artists = sequelizeClient.define(
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     is_verified: {
       type: DataTypes.BOOLEAN,

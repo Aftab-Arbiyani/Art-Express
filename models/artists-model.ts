@@ -88,6 +88,7 @@ const artists = sequelizeClient.define(
   // See https://sequelize.org/master/manual/assocs.html
   artists.hasMany(models.userToken, { sourceKey: 'id', foreignKey: 'fk_artist' });
   artists.hasMany(otpModel, { sourceKey: 'id', foreignKey: 'fk_artist' });
+  artists.hasMany(models.art, { sourceKey: 'id', foreignKey: 'fk_artist'});
 };
 
 export default artists;

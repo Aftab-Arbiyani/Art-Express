@@ -5,8 +5,8 @@ import { HookReturn } from "sequelize/types/hooks";
 import sequelize from "../sequelize";
 
 const sequelizeClient: Sequelize = sequelize;
-const category = sequelizeClient.define(
-  "category",
+const artImages = sequelizeClient.define(
+  "artImages",
   {
     id: {
       type: DataTypes.UUID,
@@ -14,28 +14,27 @@ const category = sequelizeClient.define(
       defaultValue: UUIDV4,
       allowNull: false,
     },
+    fk_art: {
+      type: DataTypes.UUID
+    },
+    file_name: {
+      type: DataTypes.STRING,
+    },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
-    title: {
-      type: DataTypes.STRING
-    },
-    description: {
-      type: DataTypes.TEXT
-    },
-    is_verified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+    image_type: {
+      type: DataTypes.ENUM('cover', 'gallery', 'certificate')
     },
     deleted_at: {
       type: DataTypes.DATE,
-    },
+    }
   },
   {
     timestamps: true,
-    tableName: "category",
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: "art_images",
     hooks: {
       beforeCount(options: any): HookReturn {
         options.raw = true;
@@ -45,10 +44,10 @@ const category = sequelizeClient.define(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-(category as any).associate = function (models: any): void {
+(artImages as any).associate = function (models: any): void {
   // Define associations here
   // See https://sequelize.org/master/manual/assocs.html
-  category.hasMany(models.art, { foreignKey: 'fk_category', sourceKey: 'id' });
+  artImages.belongsTo(models.art, { targetKey: 'id', foreignKey: 'fk_art' });
 };
 
-export default category;
+export default artImages;

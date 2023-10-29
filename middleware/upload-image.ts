@@ -39,3 +39,8 @@ export const profileImageUpload = multer({
   storage: multerDynamicStorage('profile'),
   fileFilter: commonImageFilter
 });
+
+export const artMedium = multer({
+  storage: multerDynamicStorage('medium'),
+  fileFilter: commonImageFilter
+});

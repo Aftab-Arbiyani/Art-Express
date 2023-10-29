@@ -5,8 +5,8 @@ import { HookReturn } from "sequelize/types/hooks";
 import sequelize from "../sequelize";
 
 const sequelizeClient: Sequelize = sequelize;
-const category = sequelizeClient.define(
-  "category",
+const artMedium = sequelizeClient.define(
+  "artMedium",
   {
     id: {
       type: DataTypes.UUID,
@@ -23,19 +23,20 @@ const category = sequelizeClient.define(
     description: {
       type: DataTypes.TEXT
     },
-    is_verified: {
+
+    is_active: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: true,
     },
     deleted_at: {
       type: DataTypes.DATE,
-    },
+    }
   },
   {
     timestamps: true,
-    tableName: "category",
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    tableName: "art_medium",
     hooks: {
       beforeCount(options: any): HookReturn {
         options.raw = true;
@@ -45,10 +46,10 @@ const category = sequelizeClient.define(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-(category as any).associate = function (models: any): void {
+(artMedium as any).associate = function (models: any): void {
   // Define associations here
   // See https://sequelize.org/master/manual/assocs.html
-  category.hasMany(models.art, { foreignKey: 'fk_category', sourceKey: 'id' });
+  artMedium.hasMany(models.art, { sourceKey: 'id', foreignKey: 'fk_art_medium' })
 };
 
-export default category;
+export default artMedium;

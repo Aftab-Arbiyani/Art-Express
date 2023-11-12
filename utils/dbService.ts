@@ -1,6 +1,9 @@
 // for create one as well as create many
 const create = (model, data) => model.create(data);
 
+// for create one as well as create many
+const bulkCreate = async (model, data) => await model.bulkCreate(data);
+
 // update single document that will return updated document
 const updateOne = async (model, filter, data, options = { new: true }) => {
   const result = await model.update(data, { where: filter }, options);
@@ -130,6 +133,7 @@ const paginate = (model, filter, options) => model.find(filter, options);
 
 const dbService = {
   create,
+  bulkCreate,
   updateOne,
   updateByPk,
   updateMany,

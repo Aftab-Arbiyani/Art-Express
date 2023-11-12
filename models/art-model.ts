@@ -49,10 +49,6 @@ const art = sequelizeClient.define(
       type: DataTypes.DECIMAL,
       defaultValue: 0
     },
-    tax: {
-      type: DataTypes.DECIMAL,
-      defaultValue: 0
-    },
     discount: {
       type: DataTypes.DECIMAL,
       defaultValue: 0

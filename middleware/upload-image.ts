@@ -44,3 +44,8 @@ export const artMedium = multer({
   storage: multerDynamicStorage('medium'),
   fileFilter: commonImageFilter
 });
+
+export const artImageUpload = multer({
+  storage: multerDynamicStorage('art'),
+  fileFilter: commonImageFilter
+});

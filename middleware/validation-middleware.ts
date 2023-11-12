@@ -9,6 +9,15 @@ const validationMiddleware = (schema: any) => {
       if (req?.file && fs.existsSync(req.file.path)) {
         fs.rmSync(req.file.path);
       }
+
+      if (Array.isArray(req.files)) {
+        req.files.forEach(async (post) => {
+          if (fs.existsSync(post.path)) {
+            fs.rmSync(post.path);
+          }
+        });
+      }
+
       return response.validationError({ message: 'Validation Error!', data: isValid.error }, res);
     } else {
       next();

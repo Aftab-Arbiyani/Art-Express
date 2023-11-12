@@ -10,4 +10,5 @@ export const artistEditSchema = Joi.object({
   phone_number: Joi.string().regex(/^[0-9]{10}$/).label('Mobile number').messages({
     'string.pattern.base': 'Invalid mobile number format.',
   }),
+  make_custom_art: Joi.bool()
 });

@@ -15,7 +15,8 @@ const artImages = sequelizeClient.define(
       allowNull: false,
     },
     fk_art: {
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      allowNull: false,
     },
     file_name: {
       type: DataTypes.STRING,

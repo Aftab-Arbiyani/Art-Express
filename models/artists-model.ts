@@ -57,6 +57,10 @@ const artists = sequelizeClient.define(
     profile_picture: {
       type: DataTypes.STRING,
     },
+    make_custom_art: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,

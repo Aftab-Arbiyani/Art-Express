@@ -12,5 +12,6 @@ export const editArtValidation = Joi.object({
     price: Joi.number().label('Price'),
     discount: Joi.number().label('Discount'),
     is_active: Joi.boolean(),
+    is_sold: Joi.boolean(),
     removed_image: Joi.array()
 })

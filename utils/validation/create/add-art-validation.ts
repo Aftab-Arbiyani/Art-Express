@@ -11,5 +11,6 @@ export const createArtValidation = Joi.object({
     width: Joi.number().label('Width'),
     price: Joi.number().required().label('Price'),
     discount: Joi.number().label('Discount'),
-    is_active: Joi.boolean()
+    is_active: Joi.boolean(),
+    is_sold: Joi.boolean()
 })

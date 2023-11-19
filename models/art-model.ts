@@ -57,6 +57,10 @@ const art = sequelizeClient.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true
     },
+    is_sold: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     deleted_at: {
       type: DataTypes.DATE,
     }
@@ -84,6 +88,7 @@ const art = sequelizeClient.define(
   art.belongsTo(lookupModel, { targetKey: 'id' , foreignKey: 'color'});
   art.belongsTo(models.artMedium, { targetKey: 'id' , foreignKey: 'fk_art_medium'});
   art.hasMany(models.artImages, { sourceKey: 'id', foreignKey: 'fk_art' });
+  art.hasMany(models.cartItems, { sourceKey: 'id', foreignKey: 'fk_art' });
 };
 
 export default art;

@@ -8,6 +8,8 @@ import userRouter from './user-router';
 import artMediumRouter from './art-medium-router';
 import artRouter from './art-router';
 import artImagesRouter from './art-images-router';
+import cartRouter from './cart-router';
+import cartItemsRouter from './cart-items-router';
 
 const router = express.Router();
 
@@ -20,5 +22,7 @@ router.use('/user', userRouter);
 router.use('/art-medium', artMediumRouter);
 router.use('/art', artRouter);
 router.use('/art-images', artImagesRouter);
+router.use('/cart', cartRouter);
+router.use('/cart-items', cartItemsRouter);
 
 export default router;
